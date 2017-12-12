@@ -1,7 +1,12 @@
 <template>
   <section class="page">
     <component :key="story.content._uid" v-for="blok in story.content.body" :blok="blok" :is="blok.component"></component>
-    <script src="//app.storyblok.com/f/storyblok-latest.js?t=gZUNkw3Q4pQSyzf7jTICAAtt"></script>
+    <script v-if="draft" src="//app.storyblok.com/f/storyblok-latest.js?t=gZUNkw3Q4pQSyzf7jTICAAtt"></script>
+    <script v-if="draft">
+      window.storyblok.on('change', function () {
+        window.location.reload()
+      })
+    </script>
   </section>
 </template>
 
@@ -15,7 +20,8 @@ export default {
         content: {
           body: []
         }
-      }
+      },
+      draft: false
     }
   },
   asyncData (context) {
@@ -27,7 +33,7 @@ export default {
 
     return axios.get(`https://api.storyblok.com/v1/cdn/stories/${context.params.slug}?version=${version}&token=${process.env.storyblok.token}`)
       .then((result) => {
-        return { story: result.data.story }
+        return { story: result.data.story, draft: context.isDev }
       })
       .catch((error) => {
         context.error({ statusCode: 404, message: 'Page not found' + (context.isDev ? error : '') })
