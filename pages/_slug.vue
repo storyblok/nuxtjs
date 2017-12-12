@@ -2,11 +2,6 @@
   <section>
     <component :key="story.content._uid" :blok="story.content" :is="story.content.component"></component>
     <script v-if="draft" :src="storyblok_bridge_url"></script>
-    <script v-if="draft">
-      window.storyblok.on('change', function () {
-        window.location.reload()
-      })
-    </script>
   </section>
 </template>
 
@@ -39,6 +34,11 @@ export default {
       .catch((error) => {
         context.error({ statusCode: 404, message: 'Page not found' + (context.isDev ? error : '') })
       })
+  },
+  mounted () {
+    window.storyblok.on('change', function () {
+      window.location.reload()
+    })
   }
 }
 </script>
