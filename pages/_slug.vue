@@ -1,7 +1,7 @@
 <template>
   <section>
     <component :key="story.content._uid" :blok="story.content" :is="story.content.component"></component>
-    <script v-if="draft" src="//app.storyblok.com/f/storyblok-latest.js?t=gZUNkw3Q4pQSyzf7jTICAAtt"></script>
+    <script v-if="draft" :src="storyblok_bridge_url"></script>
     <script v-if="draft">
       window.storyblok.on('change', function () {
         window.location.reload()
@@ -21,7 +21,8 @@ export default {
           body: []
         }
       },
-      draft: false
+      draft: false,
+      storyblok_bridge_url: '//app.storyblok.com/f/storyblok-latest.js?t=' + process.env.storyblok.token
     }
   },
   asyncData (context) {
