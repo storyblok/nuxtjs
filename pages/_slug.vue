@@ -1,6 +1,6 @@
 <template>
-  <section class="page">
-    <component :key="story.content._uid" v-for="blok in story.content.body" :blok="blok" :is="blok.component"></component>
+  <section>
+    <component :key="story.content._uid" :blok="story.content" :is="story.content.component"></component>
     <script v-if="draft" src="//app.storyblok.com/f/storyblok-latest.js?t=gZUNkw3Q4pQSyzf7jTICAAtt"></script>
     <script v-if="draft">
       window.storyblok.on('change', function () {
