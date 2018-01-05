@@ -36,9 +36,11 @@ export default {
       })
   },
   mounted () {
-    window.storyblok.on('change', function () {
-      window.location.reload()
-    })
+    if (process.browser) {
+      window.storyblok.on('change', function () {
+        window.location.reload()
+      })
+    }
   }
 }
 </script>
