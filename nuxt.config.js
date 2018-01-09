@@ -57,5 +57,5 @@ module.exports = {
   plugins: ['~/plugins/components.js'],
   modules: [
     ['storyblok-nuxt', { accessToken: 'YOUR_PREVIEW_TOKEN', cacheProvider: 'memory' }]
-  ],
+  ]
 }
