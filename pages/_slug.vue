@@ -1,46 +1,35 @@
 <template>
   <section>
-    <component :key="story.content._uid" :blok="story.content" :is="story.content.component"></component>
-    <script v-if="draft" :src="storyblok_bridge_url"></script>
+    <component v-if="story.content.component" :key="story.content._uid" :blok="story.content" :is="story.content.component"></component>
   </section>
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   data () {
-    return {
-      story: {
-        content: {
-          body: []
-        }
-      },
-      draft: false,
-      storyblok_bridge_url: '//app.storyblok.com/f/storyblok-latest.js?t=' + process.env.storyblok.token
-    }
-  },
-  asyncData (context) {
-    let version = 'published'
-
-    if (context.isDev) {
-      version = 'draft'
-    }
-
-    return axios.get(`https://api.storyblok.com/v1/cdn/stories/${context.params.slug}?version=${version}&token=${process.env.storyblok.token}`)
-      .then((result) => {
-        return { story: result.data.story, draft: context.isDev }
-      })
-      .catch((error) => {
-        context.error({ statusCode: 404, message: 'Page not found' + (context.isDev ? error : '') })
-      })
+    return { story: { content: {} } }
   },
   mounted () {
-    if (process.browser) {
-      window.storyblok.on('change', function () {
-        window.location.reload()
-      })
-    }
+    this.$storyblok.init()
+    this.$storyblok.on('change', () => {
+      location.reload(true)
+    })
+    this.$storyblok.on('published', () => {
+      location.reload(true)
+    })
+  },
+  asyncData (context) {
+    // Check if we are in the editor mode
+    let version = context.query._storyblok || context.isDev ? 'draft' : 'published'
+
+    // Load the JSON from the API
+    return context.app.$storyapi.get('cdn/stories/home', {
+      version: version
+    }).then((res) => {
+      return res.data
+    }).catch((res) => {
+      context.error({ statusCode: res.response.status, message: res.response.data })
+    })
   }
 }
 </script>

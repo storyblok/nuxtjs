@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   data () {
     return {
@@ -21,20 +19,24 @@ export default {
     }
   },
   asyncData (context) {
-    return axios.get('https://api.storyblok.com/v1/cdn/links?version=draft&token=' + process.env.storyblok.token)
-      .then((result) => {
-        let pages = []
-        for (let id in result.data.links) {
-          if (result.data.links.hasOwnProperty(id)) {
-            let link = result.data.links[id]
-            pages.push({ slug: link.slug, name: link.name })
-          }
+    // Check if we are in the editor mode
+    let version = context.query._storyblok || context.isDev ? 'draft' : 'published'
+
+    // Load the JSON from the API
+    return context.app.$storyapi.get('cdn/links', {
+      version: version
+    }).then((result) => {
+      let pages = []
+      for (let id in result.data.links) {
+        if (result.data.links.hasOwnProperty(id)) {
+          let link = result.data.links[id]
+          pages.push({ slug: link.slug, name: link.name })
         }
-        return { pages: pages }
-      })
-      .catch((error) => {
-        context.error({ statusCode: 404, message: 'Page not found' + (context.isDev ? error : '') })
-      })
+      }
+      return { pages: pages }
+    }).catch((res) => {
+      context.error({ statusCode: res.response.status, message: res.response.data })
+    })
   },
   head () {
     return {

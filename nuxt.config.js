@@ -37,11 +37,6 @@ module.exports = {
       }
     }
   },
-  env: {
-    storyblok: {
-      token: 'gZUNkw3Q4pQSyzf7jTICAAtt'
-    }
-  },
   generate: {
     routes: function () {
       return axios.get('https://api.storyblok.com/v1/cdn/links?version=published&token=' + process.env.storyblok.token)
@@ -59,5 +54,8 @@ module.exports = {
       })
     }
   },
-  plugins: ['~/plugins/components.js', '~/plugins/storyblok_bridge.js']
+  plugins: ['~/plugins/components.js'],
+  modules: [
+    ['storyblok-nuxt', { accessToken: 'YOUR_PREVIEW_TOKEN', cacheProvider: 'memory' }]
+  ],
 }
