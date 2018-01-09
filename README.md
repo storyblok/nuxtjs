@@ -33,7 +33,7 @@ For detailed explanation on how things work, checkout the [Nuxt.js docs](https:/
 
 1. Simply register at https://app.storyblok.com/#/signup
 2. Create a new space
-3. Exchange the token in `nuxt.config.js` with one of those in the code example
+3. Exchange "YOUR_PREVIEW_TOKEN" in `nuxt.config.js` with your preview token.
 
 ## Compose/Edit mode vs Published Mode
 
