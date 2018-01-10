@@ -1,5 +1,3 @@
-const axios = require('axios')
-
 module.exports = {
   /*
   ** Headers of the page
@@ -35,23 +33,6 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
-  },
-  generate: {
-    routes: function () {
-      return axios.get('https://api.storyblok.com/v1/cdn/links?version=published&token=' + process.env.storyblok.token)
-      .then((result) => { 
-        let pages = []
-        for (let link in result.data.links) {
-          if (result.data.links.hasOwnProperty(link)) {
-            pages.push('/' + result.data.links[link].slug)
-          }
-        }
-        return pages
-      })
-      .catch((error) => {
-        return error
-      })
     }
   },
   plugins: ['~/plugins/components.js'],
