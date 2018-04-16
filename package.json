@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "nuxt": "^1.0.0-rc11",
-    "storyblok-nuxt": "0.0.2"
+    "storyblok-js-client": "^1.0.4",
+    "storyblok-nuxt": "^0.0.3"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
